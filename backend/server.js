@@ -17,6 +17,8 @@ app.use(clerkMiddleware());
 
 app.use("/api/inngest", serve({ client: inngest, functions, signingKey: ENV.INNGEST_SIGNIN_KEY }));
 
+
+
 app.get('/health', (req, res) => {
     res.status(200).json({ message: 'success' });
 });
