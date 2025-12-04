@@ -3,15 +3,15 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required : true
+        required: true
     },
     description: {
         type: String,
-        required : true
+        required: true
     },
     price: {
         type: Number,
-        required : true,
+        required: true,
         min: 0
     },
     stock: {
@@ -22,12 +22,14 @@ const productSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        required : true
+        required: true
     },
-    image: {
-        type: String,
-        required : true
-    },
+    image: [
+        {
+            type: String,
+            required: true
+        }
+    ],
     averageRating: {
         type: Number,
         min: 0,

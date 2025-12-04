@@ -16,7 +16,7 @@ const ProductsPage = () => {
     stock: "",
     description: "",
   });
-  const [images, setImages] = useState([]);
+  const [image, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
 
   const queryClient = useQueryClient();
@@ -76,7 +76,7 @@ const ProductsPage = () => {
       stock: product.stock.toString(),
       description: product.description,
     });
-    setImagePreviews(product.images);
+    setImagePreviews(product.image);
     setShowModal(true);
   };
 
@@ -109,7 +109,7 @@ const ProductsPage = () => {
     formDataToSend.append("category", formData.category);
 
     // only append new images if they were selected
-    if (images.length > 0) images.forEach((image) => formDataToSend.append("images", image));
+    if (image.length > 0) image.forEach((image) => formDataToSend.append("images", image));
 
     if (editingProduct) {
       updateProductMutation.mutate({ id: editingProduct._id, formData: formDataToSend });
@@ -142,7 +142,7 @@ const ProductsPage = () => {
                 <div className="flex items-center gap-6">
                   <div className="avatar">
                     <div className="w-20 rounded-xl">
-                      <img src={product.images[0]} alt={product.name} />
+                      <img src={product.image[0]} alt={product.name} />
                     </div>
                   </div>
 
