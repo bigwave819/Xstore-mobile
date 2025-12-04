@@ -8,9 +8,9 @@ import { functions, inngest } from './src/config/inngest.js'
 import adminRoutes from './src/routers/admin.route.js'
 import userRoutes from './src/routers/user.route.js'
 import orderRoutes from './src/routers/order.route.js'
-import reviewRoutes from "./routes/review.route.js";
-import productRoutes from "./routes/product.route.js";
-import cartRoutes from "./routes/cart.route.js";
+import reviewRoutes from "./src/routers/review.route.js";
+import productRoutes from "./src/routers/product.route.js";
+import cartRoutes from "./src/routers/cart.route.js";
 import cors from 'cors'
 
 const app = express();
