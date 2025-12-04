@@ -4,17 +4,17 @@ import { clerkMiddleware } from "@clerk/express";
 import { serve } from "inngest/express";
 import cors from "cors";
 
-import { functions, inngest } from "./config/inngest.js";
+import { functions, inngest } from "./src/config/inngest.js";
 
-import { ENV } from "./config/env.js";
-import { connectDB } from "./config/db.js";
+import { ENV } from "./src/config/env.js";
+import connectDB from "./src/config/db.js";
 
-import adminRoutes from "./routes/admin.route.js";
-import userRoutes from "./routes/user.route.js";
-import orderRoutes from "./routes/order.route.js";
-import reviewRoutes from "./routes/review.route.js";
-import productRoutes from "./routes/product.route.js";
-import cartRoutes from "./routes/cart.route.js";
+import adminRoutes from "./src/routers/admin.route.js";
+import userRoutes from "./src/routers/user.route.js";
+import orderRoutes from "./src/routers/order.route.js";
+import reviewRoutes from "./src/routers/review.route.js";
+import productRoutes from "./src/routers/product.route.js";
+import cartRoutes from "./src/routers/cart.route.js";
 
 const app = express();
 
