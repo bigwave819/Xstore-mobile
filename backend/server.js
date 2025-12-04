@@ -1,59 +1,56 @@
-import express from 'express'
-import { ENV } from './src/config/env.js'
-import path from 'path'
-import connectDB from './src/config/db.js'
-import { clerkMiddleware } from '@clerk/express'
-import { serve } from 'inngest/express'
-import { functions, inngest } from './src/config/inngest.js'
-import adminRoutes from './src/routers/admin.route.js'
-import userRoutes from './src/routers/user.route.js'
-import orderRoutes from './src/routers/order.route.js'
-import reviewRoutes from "./src/routers/review.route.js";
-import productRoutes from "./src/routers/product.route.js";
-import cartRoutes from "./src/routers/cart.route.js";
-import cors from 'cors'
+import express from "express";
+import path from "path";
+import { clerkMiddleware } from "@clerk/express";
+import { serve } from "inngest/express";
+import cors from "cors";
+
+import { functions, inngest } from "./config/inngest.js";
+
+import { ENV } from "./config/env.js";
+import { connectDB } from "./config/db.js";
+
+import adminRoutes from "./routes/admin.route.js";
+import userRoutes from "./routes/user.route.js";
+import orderRoutes from "./routes/order.route.js";
+import reviewRoutes from "./routes/review.route.js";
+import productRoutes from "./routes/product.route.js";
+import cartRoutes from "./routes/cart.route.js";
 
 const app = express();
+
 const __dirname = path.resolve();
 
-connectDB()
-
-
 app.use(express.json());
+app.use(clerkMiddleware()); // adds auth object under the req => req.auth
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true })); // credentials: true allows the browser to send the cookies to the server with the request
 
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }))
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
-app.use("/api/inngest", serve({ 
-    client: inngest, 
-    functions, 
-    signingKey: ENV.INNGEST_SIGNIN_KEY 
-  })
-);
-
-app.use(clerkMiddleware());
-
-app.use("/api/admin", adminRoutes)
-app.use('/api/user', userRoutes)
-app.use('/api/orders', orderRoutes)
+app.use("/api/admin", adminRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 
-
-app.get('/health', (req, res) => {
-    res.status(200).json({ message: 'success' });
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "Success" });
 });
 
+// make our app ready for deployment
+if (ENV.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../admin/dist")));
 
-//make the app ready for the production
-if (ENV.NODE_ENV === "production" ) {
-  app.use(express.static(path.join(__dirname, "../admin/dist")))
-  
   app.get("/{*any}", (req, res) => {
-    res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"))
-  })
+    res.sendFile(path.join(__dirname, "../admin", "dist", "index.html"));
+  });
 }
 
-app.listen(ENV.PORT, () => {
-    console.log(`the server is running on the port ${ENV.PORT}`)
-})
+const startServer = async () => {
+  await connectDB();
+  app.listen(ENV.PORT, () => {
+    console.log("Server is up and running");
+  });
+};
+
+startServer();
