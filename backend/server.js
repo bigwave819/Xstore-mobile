@@ -8,6 +8,10 @@ import { functions, inngest } from './src/config/inngest.js'
 import adminRoutes from './src/routers/admin.route.js'
 import userRoutes from './src/routers/user.route.js'
 import orderRoutes from './src/routers/order.route.js'
+import reviewRoutes from "./routes/review.route.js";
+import productRoutes from "./routes/product.route.js";
+import cartRoutes from "./routes/cart.route.js";
+import cors from 'cors'
 
 const app = express();
 const __dirname = path.resolve();
@@ -17,6 +21,7 @@ connectDB()
 
 app.use(express.json());
 app.use(clerkMiddleware());
+app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }))
 
 app.use("/api/inngest", serve({ 
     client: inngest, 
@@ -28,6 +33,9 @@ app.use("/api/inngest", serve({
 app.use("/api/admin", adminRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/orders', orderRoutes)
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 
 app.get('/health', (req, res) => {
