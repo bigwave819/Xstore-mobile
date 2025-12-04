@@ -16,7 +16,7 @@ const router = Router();
 router.use(protectRoute, adminOnly);
 
 router.post("/products", upload.array("images", 3), createProduct);
-router.post("/products", getAllProduct);
+router.get("/products", getAllProduct);
 router.post("/products/:id", upload.array("images", 3),updateProduct);
 
 router.get("/orders", getAllOrders);
