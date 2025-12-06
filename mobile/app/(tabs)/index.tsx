@@ -4,10 +4,15 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from 'reac
 import React, { useState } from 'react'
 import SafeScreen from '@/components/SafeScreen'
 import { Ionicons } from '@expo/vector-icons'
+import useProducts from '@/hooks/useProducts'
+import ProductsGrid from '@/components/ProductsGrid'
 
 const index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  
+  const { data: products, isLoading, isError } = useProducts()
+  
 
   const CATEGORIES = [
     { name: "All", icon: "grid-outline" as const },
@@ -61,21 +66,33 @@ const index = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingHorizontal: 20 }}
           >
-            {CATEGORIES.map((category) => (
-              <TouchableOpacity
-                key={category.name}
-                onPress={() => { }}
-                className='mr-3 rounded-2xl size-20 overflow-hidden items-center justify-center bg-surface'
-              >
-                {category.icon ? (
-                  <Ionicons name={category.icon} size={36} color="#fff" />
-                ) : (
-                  <Image source={category.image} className="size-12" resizeMode="contain" />
-                )}
-              </TouchableOpacity>
-            ))}
+            {CATEGORIES.map((category) => {
+              const isSelected = selectedCategory == category.name
+              return (
+                <TouchableOpacity
+                  key={category.name}
+                  onPress={() => { }}
+                  className={`mr-3 rounded-2xl size-20 overflow-hidden items-center justify-center bg-surface ${isSelected ? "bg-primary" : 'bg-surface'}`}
+                >
+                  {category.icon ? (
+                    <Ionicons name={category.icon} size={36} color="#fff" />
+                  ) : (
+                    <Image source={category.image} className="size-12" resizeMode="contain" />
+                  )}
+                </TouchableOpacity>
+              )
+            })}
           </ScrollView>
         </View>
+
+        <View className='flex-row mx-5 justify-between items-center'>
+          <Text className='text-white text-xl font-semibold'>Products</Text>
+          <Text className='text-gray-400'>10 items</Text>
+        </View>
+
+        {/** PRODUCTS GRID */}
+        <ProductsGrid />
+
       </ScrollView>
     </SafeScreen>
   )
