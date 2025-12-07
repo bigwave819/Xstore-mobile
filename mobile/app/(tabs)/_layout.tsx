@@ -19,7 +19,7 @@ const RootLayout = () => {
             </View>
         )
     };
-    if (!isSignedIn) return <Redirect href={"/(auth)"} />
+    if (!isSignedIn) return <Redirect href="/(auth)" />;
     return (
         <Tabs
             screenOptions={{

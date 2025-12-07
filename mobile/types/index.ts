@@ -1,11 +1,13 @@
 export interface Product {
+  filter: any;
+  length: number;
   _id: string;
   name: string;
   description: string;
   price: number;
   stock: number;
   category: string;
-  images: string[];
+  image: string[];
   averageRating: number;
   totalReviews: number;
   createdAt: string;
