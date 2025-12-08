@@ -113,14 +113,14 @@ export async function updateCartItem(req, res) {
 
 export async function removeFromCart(req, res) {
   try {
-    const { productId } = req.params;
+    const { itemId } = req.params;
 
     const cart = await Cart.findOne({ clerkId: req.user.clerkId });
     if (!cart) {
       return res.status(404).json({ error: "Cart not found" });
     }
 
-    cart.items = cart.items.filter((item) => item.product.toString() !== productId);
+    cart.items = cart.items.filter((item) => item.product.toString() !== itemId);
     await cart.save();
 
     res.status(200).json({ message: "Item removed from cart", cart });

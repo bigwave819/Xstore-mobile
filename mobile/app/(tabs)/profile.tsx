@@ -1,8 +1,10 @@
-import { View, Image, Text, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
-import SafeScreen from '@/components/SafeScreen'
-import { useAuth, useUser } from '@clerk/clerk-expo'
-import { Ionicons } from '@expo/vector-icons'
+import SafeScreen from "@/components/SafeScreen";
+import { useAuth, useUser } from "@clerk/clerk-expo";
+
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image } from "expo-image";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 const MENU_ITEMS = [
   { id: 1, icon: "person-outline", title: "Edit Profile", color: "#3B82F6", action: "/profile" },
@@ -11,51 +13,51 @@ const MENU_ITEMS = [
   { id: 4, icon: "heart-outline", title: "Wishlist", color: "#EF4444", action: "/wishlist" },
 ] as const;
 
-
-const Profile = () => {
-  const {signOut} = useAuth()
+const ProfileScreen = () => {
+  const { signOut } = useAuth();
   const { user } = useUser();
 
   const handleMenuPress = (action: (typeof MENU_ITEMS)[number]["action"]) => {
     if (action === "/profile") return;
-    // router.push(action)
+    router.push(action);
   };
 
   return (
     <SafeScreen>
       <ScrollView
-        className='flex-1'
+        className="flex-1"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 10, marginTop: 16 }}
+        contentContainerStyle={{ paddingBottom: 100 }}
       >
-        {/** HEADER */}
-        <View className='mx-5 bg-surface rounded-xl p-5'>
-          <View className='flex-row items-center'>
+        {/* HEADER */}
+        <View className="px-6 pb-8">
+          <View className="bg-surface rounded-3xl p-6">
+            <View className="flex-row items-center">
+              <View className="relative">
+                <Image
+                  source={user?.imageUrl}
+                  style={{ width: 80, height: 80, borderRadius: 40 }}
+                  transition={200}
+                />
+                <View className="absolute -bottom-1 -right-1 bg-primary rounded-full size-7 items-center justify-center border-2 border-surface">
+                  <Ionicons name="checkmark" size={16} color="#121212" />
+                </View>
+              </View>
 
-            <View className='relative'>
-              <Image
-                source={{ uri: user?.imageUrl }}
-                style={{ width: 80, height: 80, borderRadius: 40 }}
-              />
-              <View className='absolute -bottom-1 -right-[-1] bg-primary rounded-full size-6 items-center justify-center border-2 border-surface'>
-                <Ionicons name='checkmark' size={16} color={"#121212"} />
+              <View className="flex-1 ml-4">
+                <Text className="text-text-primary text-2xl font-bold mb-1">
+                  {user?.firstName} {user?.lastName}
+                </Text>
+                <Text className="text-text-secondary text-sm">
+                  {user?.emailAddresses?.[0]?.emailAddress || "No email"}
+                </Text>
               </View>
             </View>
-
-            <View className='flex-1 ml-4'>
-              <Text className="text-text-primary text-2xl font-bold mb-1">
-                {user?.firstName} {user?.lastName}
-              </Text>
-              <Text className="text-text-secondary text-sm">
-                {user?.emailAddresses?.[0]?.emailAddress || "No email"}
-              </Text>
-            </View>
-
           </View>
         </View>
 
         {/* MENU ITEMS */}
-        <View className="flex-row flex-wrap gap-2 mx-6 mb-3 my-5">
+        <View className="flex-row flex-wrap gap-2 mx-6 mb-3">
           {MENU_ITEMS.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -94,7 +96,7 @@ const Profile = () => {
           <TouchableOpacity
             className="flex-row items-center justify-between py-2"
             activeOpacity={0.7}
-          // onPress={() => router.push("/privacy-security")}
+            onPress={() => router.push("/privacy-security")}
           >
             <View className="flex-row items-center">
               <Ionicons name="shield-checkmark-outline" size={22} color="#FFFFFF" />
@@ -115,10 +117,9 @@ const Profile = () => {
         </TouchableOpacity>
 
         <Text className="mx-6 mb-3 text-center text-text-secondary text-xs">Version 1.0.0</Text>
-
       </ScrollView>
     </SafeScreen>
-  )
-}
+  );
+};
 
-export default Profile
+export default ProfileScreen;
